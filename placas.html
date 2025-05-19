@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartSolar - Produtos Solares</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet"/>
+</head>
+<body class="bg-gray-100">
+    <!-- Header -->
+    <header class="p-4 bg-gray-800">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="/assets/images/Smart Solar.png" alt="SmartSolar Logo" class="h-12">
+            <nav class="space-x-6 flex">
+                <a href="index.html" class="text-white font-bold hover:text-gray-300">Início</a>
+                <a href="/placas.html" class="text-white font-bold hover:text-gray-300">Placas</a>
+                <a href="#" class="text-white font-bold hover:text-gray-300">Calcular</a>
+            </nav>
+            <button class="text-white bg-green-500 hover:bg-green-600 font-bold px-4 py-2 rounded-md">
+                Admin
+            </button>
+        </div>
+    </header>
+
+    <!-- Search & Filters -->
+    <div class="container mx-auto mt-8 px-4">
+        <div class="flex flex-col md:flex-row md:items-center md:space-x-4">
+            <input id="searchInput" type="text" placeholder="Buscar produtos..." 
+                   class="flex-1 p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500 mb-4 md:mb-0" />
+            <select id="categoryFilter" class="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500">
+                <option value="">Todas as categorias</option>
+                <option value="Monocristalino">Silício Monocristalino</option>
+                <option value="Policristalino">Silício Policristalino</option>
+                <option value="Amorfo">Silício Amorfo</option>
+                <option value="CdTe">Telureto de Cádmio</option>
+                <option value="CIGS">CIGS</option>
+                <option value="OPV">Orgânicas (OPV)</option>
+                <option value="HJT">Híbridos (HJT)</option>
+            </select>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productGrid" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- Cards serão inseridos via JavaScript -->
+        </div>
+    </div>
+
+<script src="../assets/js/filter.js"></script>
+ 
+</body>
+</html>
