@@ -18,14 +18,14 @@ public class Usuario {
     public int usuarioId;
     public String nome;
     public String email;
-    public String hashSenha;
+    public String senha;
     public LocalDateTime dataCadastro;
     public LocalDateTime dataUltimoAcesso;
 
-    public Usuario(String nome, String email, String hashSenha, LocalDateTime dataCadastro, LocalDateTime dataUltimoAcesso) {
+    public Usuario(String nome, String email, String senha, LocalDateTime dataCadastro, LocalDateTime dataUltimoAcesso) {
         this.nome = nome;
         this.email = email;
-        this.hashSenha = hashSenha;
+        this.senha = senha;
         this.dataCadastro = dataCadastro;
         this.dataUltimoAcesso = dataUltimoAcesso;
     }
