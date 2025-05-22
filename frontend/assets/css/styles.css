@@ -1,0 +1,45 @@
+*{
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+.home{
+    background-image:url('../images/background.jpg');
+    height: 100dvh;
+    width: 99dvw;    
+}
+
+.filter-overlay::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3); /* Cor preta com 30% de opacidade */
+    z-index: -1; /* Garante que o overlay fique atrás do conteúdo */
+}
+
+.choseSmartSolar, .PlacasSolares{
+    background-color: #f3f6fb;
+}
+
+.PlacasSolares{
+    padding: 50px;
+   
+    margin: 20px auto;
+    border-radius: 20px;
+    width: 80%;
+    background-color: #101935 ;
+}
+
+.btn_admin{
+    background-color: #5D6E86;
+}
+
+.btn_admin:hover{
+    background-color: #dfdfdf;
+}
