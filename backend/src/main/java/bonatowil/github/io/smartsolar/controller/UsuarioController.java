@@ -21,6 +21,14 @@ public class UsuarioController {
 
     @PostMapping("/")
     public ResponseEntity<Usuario> saveFeedback(@RequestBody UsuarioDTO usuarioDTO) {
+        if (usuarioDTO.getNome() == null || usuarioDTO.getNome().isEmpty() ||
+            usuarioDTO.getEmail() == null || usuarioDTO.getEmail().isEmpty() ||
+            usuarioDTO.getSenha() == null || usuarioDTO.getSenha().isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        if (usuarioService.findByEmail(usuarioDTO.getEmail()) != null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+        }
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.saveUsuario(usuarioDTO));
     }
 }
