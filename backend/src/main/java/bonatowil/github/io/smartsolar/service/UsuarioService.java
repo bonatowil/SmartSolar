@@ -1,7 +1,7 @@
 package bonatowil.github.io.smartsolar.service;
 
-import bonatowil.github.io.smartsolar.dto.UsuarioDTO;
 import bonatowil.github.io.smartsolar.entity.Usuario;
+import bonatowil.github.io.smartsolar.dto.UsuarioDTO;
 import bonatowil.github.io.smartsolar.repository.UsuarioRepository;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +24,10 @@ public class UsuarioService {
                                       LocalDateTime.ofInstant(Instant.now(), ZoneId.of("America/Sao_Paulo")),
                                       LocalDateTime.ofInstant(Instant.now(), ZoneId.of("America/Sao_Paulo")));
         return usuarioRepository.save(usuario);
+    }
+
+    public Usuario findById(int usuarioId) {
+        return usuarioRepository.findById((long) usuarioId).orElse(null);
     }
 
     public Usuario findByEmail(String email) {
