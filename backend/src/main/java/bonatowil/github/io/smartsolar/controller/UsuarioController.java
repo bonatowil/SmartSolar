@@ -4,6 +4,13 @@ import bonatowil.github.io.smartsolar.dto.UsuarioDTO;
 import bonatowil.github.io.smartsolar.dto.UsuarioPublicDTO;
 import bonatowil.github.io.smartsolar.entity.Usuario;
 import bonatowil.github.io.smartsolar.service.UsuarioService;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -70,47 +77,47 @@ public class UsuarioController {
 
     @GetMapping("/endereco")
     public ResponseEntity<Map<String, Double>> getCoordenadasPorCep(@RequestParam String cep) {
-        RestTemplate restTemplate = new RestTemplate();
+        cep = cep.replace("-", "").trim();
 
-        try {
-            // 1. Consulta ViaCEP
+        if (cep.length() > 9 || !cep.matches("\\d{5}-?\\d{3}") || cep.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        try (CloseableHttpClient client = HttpClients.createDefault()) {
             String viaCepUrl = "https://viacep.com.br/ws/" + cep + "/json/";
-            Map<String, Object> viaCepResponse = restTemplate.getForObject(viaCepUrl, Map.class);
+            HttpGet viaCepRequest = new HttpGet(viaCepUrl);
+            String viaCepResponse = client.execute(viaCepRequest, response -> EntityUtils.toString(response.getEntity()));
 
-            if (viaCepResponse == null || viaCepResponse.containsKey("erro")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            }
+            JsonObject viaCepJson = JsonParser.parseString(viaCepResponse).getAsJsonObject();
 
-            // 2. Montar endereço completo
-            String logradouro = (String) viaCepResponse.get("logradouro");
-            String bairro = (String) viaCepResponse.get("bairro");
-            String localidade = (String) viaCepResponse.get("localidade");
-            String uf = (String) viaCepResponse.get("uf");
-
-            String enderecoCompleto = String.format("%s, %s, %s, %s, Brasil",
-                    logradouro, bairro, localidade, uf);
-
-            // 3. Consulta Nominatim
-            String nominatimUrl = "https://nominatim.openstreetmap.org/search?format=json&q="
-                    + URLEncoder.encode(enderecoCompleto, StandardCharsets.UTF_8);
-
-            System.out.println(nominatimUrl);
-
-            // Nominatim retorna um array de objetos
-            var responseEntity = restTemplate.getForEntity(nominatimUrl, Map.class);
-            Object[] nominatimResponse = responseEntity.get("lat");
-
-            System.out.println(Arrays.toString(nominatimResponse));
-
-            if (nominatimResponse == null || nominatimResponse.length == 0) {
+            if (viaCepJson.has("erro")) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
 
-            // Extrair lat e lon do primeiro resultado
+            String logradouro = viaCepJson.get("logradouro").getAsString();
+            String bairro = viaCepJson.get("bairro").getAsString();
+            String localidade = viaCepJson.get("localidade").getAsString();
+            String uf = viaCepJson.get("uf").getAsString();
+
+            String address = String.format("%s, %s, %s, %s, Brasil", logradouro, bairro, localidade, uf);
+
+            String encodedAddress = URLEncoder.encode(address, "UTF-8");
+            String nominatimUrl = "https://nominatim.openstreetmap.org/search?q=" + encodedAddress + "&format=json&limit=1";
+            HttpGet nominatimRequest = new HttpGet(nominatimUrl);
+            nominatimRequest.addHeader("User-Agent", "SmartSolar/1.0 (");
+
+            String nominatimResponse = client.execute(nominatimRequest, response -> EntityUtils.toString(response.getEntity()));
+
+            JsonArray nominatimJson = JsonParser.parseString(nominatimResponse).getAsJsonArray();
+
+            if (nominatimJson.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+
+            JsonObject locationObj = nominatimJson.get(0).getAsJsonObject();
             Map<String, Double> coordenadas = new HashMap<>();
-            Map<String, Object> firstResult = (Map<String, Object>) nominatimResponse[0];
-            coordenadas.put("lat", Double.parseDouble((String) firstResult.get("lat")));
-            coordenadas.put("lng", Double.parseDouble((String) firstResult.get("lon")));
+
+            coordenadas.put("latitude", locationObj.get("lat").getAsDouble());
+            coordenadas.put("longitude", locationObj.get("lon").getAsDouble());
 
             return ResponseEntity.ok(coordenadas);
 
