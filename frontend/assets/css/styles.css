@@ -6,23 +6,59 @@ html{
     scroll-behavior: smooth;
 }
 
-.home{
-    background-image:url('../images/background.jpg');
-    height: 100dvh;
-    width: 99dvw;    
+body.home {
+    transition: background-color 0.3s ease-in-out;
 }
 
+.dark .home {
+    background-image: none; 
+    background-color: #111827; 
+}
+
+
+.dark .filter-overlay::before {
+    background-color: rgba(0, 0, 0, 0.3); /* Overlay mais suave no dark */
+}
+
+.login-container {
+   position: relative;
+   z-index: 2;
+   transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+/* Esconde o ícone não ativo */
+.dark #sun-icon { display: inline-block; }
+#moon-icon { display: inline-block; }
+.dark #moon-icon { display: none; }
+#sun-icon { display: none; }
+
+.home {
+    background-image: url('../assets/images/background-solar.jpg'); /* Adjust path if needed */
+    background-size: cover;
+    position: relative;
+    min-height: 100vh; /* Ensure it covers the full viewport height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Overlay em modo light */
 .filter-overlay::before {
     content: "";
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3); /* Cor preta com 30% de opacidade */
-    z-index: -1; /* Garante que o overlay fique atrás do conteúdo */
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); 
+    z-index: 1;
+    transition: background-color 0.3s ease-in-out;
 }
 
+.login-container {
+    position: relative;
+    z-index: 2; /* Ensure login box is above overlay */
+}
 .choseSmartSolar, .PlacasSolares{
     background-color: #f3f6fb;
 }
@@ -42,4 +78,13 @@ html{
 
 .btn_admin:hover{
     background-color: #dfdfdf;
+}
+
+.register-container { /* Nome alterado para clareza */
+    position: relative;
+    z-index: 2;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    padding: 2rem 3rem; 
+    width: 91.666667%; /* w-11/12 */
+    height: 70%;
 }
