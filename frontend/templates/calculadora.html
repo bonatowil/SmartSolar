@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-br" class=""> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmarSolar - Calculadora</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="../assets/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f3f6fb;
+        }
+        .dark body {
+            background-color: #111827;
+        }
+        #map-container {
+            height: 450px; /* Altura ajustada */
+            background-color: #e0e0e0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+            border: 1px solid #ccc;
+            width: 100%;
+        }
+        .dark #map-container {
+            background-color: #374151; /* Cinza escuro */
+            border-color: #4b5563;
+            color: #d1d5db; /* Cinza claro */
+        }
+        .result-box {
+            background-color: #e9ecef; /* Cinza bem claro */
+            padding: 1.5rem;
+            text-align: center;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .dark .result-box {
+            background-color: #1f2937; /* Cinza mais escuro */
+            border: 1px solid #374151;
+        }
+        .result-box h4 {
+             color: #495057; /* Cinza escuro */
+             margin-bottom: 0.5rem;
+        }
+        .dark .result-box h4 {
+             color: #9ca3af; /* Cinza médio */
+        }
+         .result-box p {
+             font-size: 1.75em;
+             font-weight: bold;
+             color: #007bff; /* Azul */
+        }
+        .dark .result-box p {
+             color: #34d399; /* Verde */
+        }
+    </style>
+</head>
+<body class="dark:bg-gray-900">
+
+    <header class="p-4 bg-gray-800 dark:bg-gray-900 shadow-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="../assets/images/Smart Solar.png" alt="SmartSolar Logo" class="h-10 md:h-12">
+            <nav class="space-x-4 md:space-x-6 hidden md:flex">
+                <a href="home.html" class="text-white font-bold hover:text-green-400 dark:hover:text-green-500">Início</a>
+                <a href="calculadora.html" class="text-white font-bold hover:text-green-400 dark:hover:text-green-500 border-b-2 border-green-500 pb-1">Calculadora</a>
+                <a href="placas.html" class="text-white font-bold hover:text-green-400 dark:hover:text-green-500">Placas</a>
+                </nav>
+            <div class="flex items-center space-x-4">
+                 <button id="theme-toggle" type="button" class="text-gray-400 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                    <svg id="moon-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                    <svg id="sun-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm8-7a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM3 10a1 1 0 01-1 1H1a1 1 0 110-2h1a1 1 0 011 1zM15.657 5.657a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zm-11.314 0a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM15.657 14.343a1 1 0 01-1.414 0l-.707-.707a1 1 0 111.414-1.414l.707.707a1 1 0 010 1.414zm-11.314 0a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 110 10 5 5 0 010-10z"></path></svg>
+                </button>
+                <a href="index.html" class="text-white bg-red-500 hover:bg-red-600 font-bold px-4 py-2 rounded-md text-sm">
+                    Sair <i class="fas fa-sign-out-alt ml-1"></i>
+                </a>
+                <button data-collapse-toggle="mobile-menu-calc" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-400 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600" aria-controls="mobile-menu-calc" aria-expanded="false">
+                    <span class="sr-only">Abrir menu</span>
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+                </button>
+            </div>
+        </div>
+        <div class="hidden md:hidden" id="mobile-menu-calc">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="home.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Início</a>
+                <a href="calculadora.html" class="text-white block px-3 py-2 rounded-md text-base font-medium bg-green-600">Calculadora</a>
+                <a href="placas.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Placas</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto mt-8 p-4">
+
+        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
+            <i class="fas fa-drafting-compass mr-2"></i> Simulador Solar SmarSolar
+        </h1>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            <div class="lg:col-span-1 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 h-fit">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-5 border-b pb-2 dark:border-gray-600">
+                    <i class="fas fa-edit mr-2"></i> 1. Insira seus Dados
+                </h2>
+                <form id="solar-form">
+                    <div class="mb-4">
+                        <label for="address" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Endereço Completo:</label>
+                        <input type="text" id="address" name="address" 
+                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                               placeholder="Rua, Número, Cidade - Estado" required>
+                        <button type="button" id="load-map-btn" class="mt-2 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-blue-600 dark:hover:bg-blue-700">
+                           <i class="fas fa-search-location mr-1"></i> Carregar Endereço no Mapa
+                        </button>
+                    </div>
+                    <div class="mb-6">
+                        <label for="avg-bill" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Gasto Médio Mensal com Energia (R$):</label>
+                         <div class="relative">
+                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">R$</div>
+                             <input type="number" id="avg-bill" name="avg-bill" 
+                                    class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
+                                    placeholder="350.00" step="0.01" required>
+                         </div>
+                    </div>
+                    </form>
+            </div>
+
+            <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
+                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-5 border-b pb-2 dark:border-gray-600">
+                    <i class="fas fa-map-marker-alt mr-2"></i> 2. Selecione a Área no Mapa
+                </h2>
+                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                    Após carregar o endereço, use as ferramentas de desenho <i class="fas fa-vector-square"></i> (que aparecerão no mapa) para delimitar a área do telhado onde deseja instalar as placas.
+                </p>
+                <div id="map-container">
+                    <i class="fas fa-map text-6xl text-gray-400 dark:text-gray-500"></i>
+                    <span class="ml-4 text-gray-500 dark:text-gray-600">Carregue um endereço para visualizar o mapa.</span>
+                </div>
+                 <button type="button" id="calculate-btn" 
+                         class="mt-6 w-full bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline text-lg transition duration-300
+                                dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 flex items-center justify-center">
+                    <i class="fas fa-cogs mr-2"></i> Calcular Potencial Solar
+                 </button>
+            </div>
+            
+        </div>
+
+        <section class="mt-10 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700" id="results-section" style="display: none;"> <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-5 border-b pb-2 dark:border-gray-600">
+                <i class="fas fa-poll mr-2"></i> 3. Resultados da Simulação
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+                <div class="result-box">
+                    <h4><i class="fas fa-ruler-combined"></i> Área Selecionada</h4>
+                    <p id="result-area">-- m²</p>
+                </div>
+                <div class="result-box">
+                    <h4><i class="fas fa-solar-panel"></i> Painéis</h4>
+                    <p id="result-panels">--</p>
+                </div>
+                <div class="result-box">
+                    <h4><i class="fas fa-dollar-sign"></i> Custo Estimado</h4>
+                    <p id="result-cost">R$ --</p>
+                </div>
+                <div class="result-box">
+                    <h4><i class="fas fa-undo-alt"></i> Retorno (ROI)</h4>
+                    <p id="result-roi">-- anos</p>
+                </div>
+            </div>
+            <div class="mt-8 p-4 border-t dark:border-gray-600">
+                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Projeção (Gráficos)</h3>
+                 <div id="charts-container" class="bg-gray-100 dark:bg-gray-700 p-6 rounded h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                    (Espaço para Gráficos Interativos - Ex: Chart.js)
+                 </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-gray-800 dark:bg-gray-900 text-center p-4 mt-12">
+        <p class="text-sm text-gray-400 dark:text-gray-500">
+            &copy; 2025 SmarSolar - Todos os direitos reservados.
+        </p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script src="../assets/js/dark.js"></script>
+    <script>
+        // JS Básico para simular a exibição de resultados
+        document.getElementById('calculate-btn').addEventListener('click', function() {
+            // Aqui viria a lógica real de cálculo e mapa...
+            // Por enquanto, apenas exibimos a seção de resultados com dados fictícios
+            document.getElementById('result-area').textContent = '150 m²';
+            document.getElementById('result-panels').textContent = '25';
+            document.getElementById('result-cost').textContent = 'R$ 35.000';
+            document.getElementById('result-roi').textContent = '4.5 anos';
+            
+            const resultsSection = document.getElementById('results-section');
+            resultsSection.style.display = 'block';
+            resultsSection.scrollIntoView({ behavior: 'smooth' }); // Rola para ver os resultados
+
+            // Aqui você chamaria a função para desenhar os gráficos
+        });
+
+        // Simulação de carregar mapa (apenas muda o texto)
+        document.getElementById('load-map-btn').addEventListener('click', function() {
+            const mapContainer = document.getElementById('map-container');
+            mapContainer.innerHTML = '<i class="fas fa-map-marked-alt text-6xl text-green-500"></i><span class="ml-4 text-gray-700 dark:text-gray-300">Mapa Carregado! Use as ferramentas para desenhar.</span>';
+        });
+
+    </script>
+</body>
+</html>
