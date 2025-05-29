@@ -7,6 +7,11 @@ import bonatowil.github.io.smartsolar.service.UsuarioService;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -26,6 +31,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+@Tag(name = "Usuários", description = "Gestão de usuários")
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -35,6 +41,12 @@ public class UsuarioController {
         this.usuarioService = usuarioService;
     }
 
+    @Operation(summary = "Criar um novo usuário")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "Usuário criado com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados do usuário inválidos", content = @Content),
+            @ApiResponse(responseCode = "409", description = "Email já cadastrado", content = @Content)
+    })
     @PostMapping("/")
     public ResponseEntity<Usuario> saveUsuario(@RequestBody UsuarioDTO usuarioDTO) {
         if (usuarioDTO.getNome() == null || usuarioDTO.getNome().isEmpty() ||
@@ -48,6 +60,11 @@ public class UsuarioController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.saveUsuario(usuarioDTO));
     }
 
+    @Operation(summary = "Obter usuário público por ID")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Usuário encontrado"),
+            @ApiResponse(responseCode = "404", description = "Usuário não encontrado", content = @Content)
+    })
     @GetMapping("/{usuarioId}")
     public ResponseEntity<UsuarioPublicDTO> getUsuarioById(@PathVariable int usuarioId) {
         Usuario usuario = usuarioService.findById(usuarioId);
@@ -59,6 +76,12 @@ public class UsuarioController {
         );
     }
 
+    @Operation(summary = "Autenticar usuário")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Autenticação bem-sucedida"),
+            @ApiResponse(responseCode = "404", description = "Email não cadastrado", content = @Content),
+            @ApiResponse(responseCode = "401", description = "Senha incorreta", content = @Content)
+    })
     @GetMapping("/auth")
     public ResponseEntity<Map<String, Integer>> authUsuario(@RequestHeader("email") String email, @RequestHeader("senha") String senha) {
         email = email.trim();
@@ -75,6 +98,13 @@ public class UsuarioController {
         return ResponseEntity.ok(Collections.singletonMap("usuarioId", usuario.getUsuarioId()));
     }
 
+    @Operation(summary = "Buscar coordenadas a partir do CEP")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Coordenadas retornadas com sucesso"),
+            @ApiResponse(responseCode = "400", description = "CEP inválido", content = @Content),
+            @ApiResponse(responseCode = "404", description = "CEP não encontrado", content = @Content),
+            @ApiResponse(responseCode = "500", description = "Erro interno ao buscar coordenadas", content = @Content)
+    })
     @GetMapping("/endereco")
     public ResponseEntity<Map<String, Double>> getCoordenadasPorCep(@RequestParam String cep) {
         cep = cep.replace("-", "").trim();
