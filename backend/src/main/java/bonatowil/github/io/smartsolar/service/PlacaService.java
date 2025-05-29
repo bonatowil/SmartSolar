@@ -3,7 +3,12 @@ package bonatowil.github.io.smartsolar.service;
 import bonatowil.github.io.smartsolar.dto.PlacaDTO;
 import bonatowil.github.io.smartsolar.entity.Placa;
 import bonatowil.github.io.smartsolar.repository.PlacaRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 
 @Service
 public class PlacaService {
@@ -26,5 +31,17 @@ public class PlacaService {
                 placaDTO.getTolerancia(),
                 placaDTO.getPeso()
         ));
+    }
+
+    public List<Placa> findAll() {
+        return placaRepository.findAll();
+    }
+
+    public List<Placa> findAllFilter(String descricao, String marca, String modelo) {
+        return placaRepository.findAllFilter(descricao, marca, modelo);
+    }
+
+    public Placa findById(Long placaId) {
+        return placaRepository.findById(placaId).orElse(null);
     }
 }
