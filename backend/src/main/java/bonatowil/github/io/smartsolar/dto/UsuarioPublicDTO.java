@@ -8,8 +8,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 public class UsuarioPublicDTO {
-    public int usuarioId;
-    public String nome;
-    public LocalDateTime dataCadastro;
-    public LocalDateTime dataUltimoAcesso;
+    private int usuarioId;
+    private String nome;
+    private LocalDateTime dataCadastro;
+    private LocalDateTime dataUltimoAcesso;
 }

@@ -1,9 +1,6 @@
 package bonatowil.github.io.smartsolar.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,12 +16,22 @@ import java.time.LocalDateTime;
 public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int usuarioId;
-    public String nome;
-    public String email;
-    public String senha;
-    public LocalDateTime dataCadastro;
-    public LocalDateTime dataUltimoAcesso;
+    private int usuarioId;
+
+    @Column(nullable = false)
+    private String nome;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    private String senha;
+
+    @Column(nullable = false)
+    private LocalDateTime dataCadastro;
+
+    @Column(nullable = false)
+    private LocalDateTime dataUltimoAcesso;
 
     public Usuario(String nome, String email, String senha, LocalDateTime dataCadastro, LocalDateTime dataUltimoAcesso) {
         this.nome = nome;

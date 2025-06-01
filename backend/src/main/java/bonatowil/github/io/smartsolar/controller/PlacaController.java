@@ -46,11 +46,10 @@ public class PlacaController {
             @ApiResponse(responseCode = "200", description = "Lista de placas retornada com sucesso")
     })
     @GetMapping("/")
-    public ResponseEntity<List<PlacaDTO>> listPlaca(
+    public ResponseEntity<List<Placa>> listPlaca(
             @RequestParam(required = false, defaultValue = "") String descricao,
             @RequestParam(required = false, defaultValue = "") String marca,
             @RequestParam(required = false, defaultValue = "") String modelo) {
-        List<PlacaDTO> listaPlacasDTO = new java.util.ArrayList<>(List.of());
         List<Placa> listaPlacas;
 
         if (descricao.isEmpty() && marca.isEmpty() && modelo.isEmpty()) {
@@ -59,23 +58,7 @@ public class PlacaController {
             listaPlacas = placaService.findAllFilter(descricao, marca, modelo);
         }
 
-        for (Placa placa : listaPlacas) {
-            listaPlacasDTO.add(
-                    new PlacaDTO(
-                            placa.getDescricao(),
-                            placa.getMarca(),
-                            placa.getModelo(),
-                            placa.getDimensaoX(),
-                            placa.getDimensaoY(),
-                            placa.getDimensaoZ(),
-                            placa.getPreco(),
-                            placa.getPotencia(),
-                            placa.getTolerancia(),
-                            placa.getPeso()
-                    )
-            );
-        }
-        return ResponseEntity.ok(listaPlacasDTO);
+        return ResponseEntity.ok(listaPlacas);
     }
 
     @Operation(summary = "Obter uma placa por ID")
@@ -84,24 +67,11 @@ public class PlacaController {
             @ApiResponse(responseCode = "404", description = "Placa não encontrada", content = @Content)
     })
     @GetMapping("/{placaId}")
-    public ResponseEntity<PlacaDTO> getPlaca(@PathVariable("placaId") Long placaId) {
+    public ResponseEntity<Placa> getPlaca(@PathVariable("placaId") Long placaId) {
         Placa placa = placaService.findById(placaId);
         if (placa == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.ok(
-                new PlacaDTO(
-                        placa.getDescricao(),
-                        placa.getMarca(),
-                        placa.getModelo(),
-                        placa.getDimensaoX(),
-                        placa.getDimensaoY(),
-                        placa.getDimensaoZ(),
-                        placa.getPreco(),
-                        placa.getPotencia(),
-                        placa.getTolerancia(),
-                        placa.getPeso()
-                )
-        );
+        return ResponseEntity.ok(placa);
     }
 }

@@ -1,9 +1,6 @@
 package bonatowil.github.io.smartsolar.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,19 +17,43 @@ import java.util.List;
 public class Placa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int placaId;
-    public boolean ativo;
-    public String descricao;
-    public String marca;
-    public String modelo;
-    public Double dimensaoX;
-    public Double dimensaoY;
-    public Double dimensaoZ;
-    public double preco;
-    public double area;
-    public double potencia;
-    public double tolerancia;
-    public double peso;
+    private int placaId;
+
+    @Column(nullable = false)
+    private boolean ativo;
+
+    @Column(nullable = false)
+    private String descricao;
+
+    @Column(nullable = false)
+    private String marca;
+
+    @Column(nullable = false)
+    private String modelo;
+
+    @Column(nullable = false)
+    private Double dimensaoX;
+
+    @Column(nullable = false)
+    private Double dimensaoY;
+
+    @Column(nullable = false)
+    private Double dimensaoZ;
+
+    @Column(nullable = false)
+    private double preco;
+
+    @Column(nullable = false)
+    private double area;
+
+    @Column(nullable = false)
+    private double potencia;
+
+    @Column(nullable = false)
+    private double tolerancia;
+
+    @Column(nullable = false)
+    private double peso;
 
     public Placa(String descricao, String marca, String modelo, Double dimensaoX, Double dimensaoY, Double dimensaoZ, double preco, double potencia, double tolerancia, double peso) {
         this.ativo = true;

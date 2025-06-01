@@ -12,14 +12,14 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PlacaDTO {
-    public String descricao;
-    public String marca;
-    public String modelo;
-    public Double dimensaoX;
-    public Double dimensaoY;
-    public Double dimensaoZ;
-    public double preco;
-    public double potencia;
-    public double tolerancia;
-    public double peso;
+    private String descricao;
+    private String marca;
+    private String modelo;
+    private Double dimensaoX;
+    private Double dimensaoY;
+    private Double dimensaoZ;
+    private double preco;
+    private double potencia;
+    private double tolerancia;
+    private double peso;
 }

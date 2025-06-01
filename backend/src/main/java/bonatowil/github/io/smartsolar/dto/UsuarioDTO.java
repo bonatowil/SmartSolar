@@ -5,9 +5,9 @@ import lombok.Getter;
 
 @Getter
 public class UsuarioDTO {
-    public String nome;
-    public String email;
-    public String senha;
+    private String nome;
+    private String email;
+    private String senha;
 
     public UsuarioDTO(String nome, String email, String senha) {
         this.nome = nome.trim();
