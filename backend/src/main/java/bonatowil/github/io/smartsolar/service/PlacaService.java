@@ -3,12 +3,9 @@ package bonatowil.github.io.smartsolar.service;
 import bonatowil.github.io.smartsolar.dto.PlacaDTO;
 import bonatowil.github.io.smartsolar.entity.Placa;
 import bonatowil.github.io.smartsolar.repository.PlacaRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.OptionalInt;
 
 @Service
 public class PlacaService {

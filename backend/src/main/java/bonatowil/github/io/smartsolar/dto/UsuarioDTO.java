@@ -1,6 +1,5 @@
 package bonatowil.github.io.smartsolar.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
