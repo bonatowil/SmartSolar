@@ -73,16 +73,13 @@ public class CalculoController {
         try {
             List<ROIPeriodoDTO> listaROI = calculoService.calcularROI(calculoId);
             if (listaROI.isEmpty()) {
-                // Sem economia ou sem investimento: devolve 204 No Content
                 return ResponseEntity.noContent().build();
             }
             return ResponseEntity.ok(listaROI);
 
         } catch (IllegalArgumentException ex) {
-            // Cálculo não encontrado → 404
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         } catch (Exception ex) {
-            // Qualquer outro erro inesperado → 500
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
