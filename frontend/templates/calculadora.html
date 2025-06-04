@@ -64,12 +64,17 @@
                 </h2>
                 <form id="solar-form">
                     <div class="mb-4">
-                        <label for="address" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Endereço Completo:</label>
+                        <label for="address" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Endereço Completo ou CEP:</label>
                         <input type="text" id="address" name="address" 
                                class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                placeholder="Rua, Número, Cidade - Estado" required>
-                        <button type="button" id="load-map-btn" class="mt-2 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-blue-600 dark:hover:bg-blue-700">
-                           <i class="fas fa-search-location mr-1"></i> Carregar Endereço no Mapa
+                         <button type="button" id="load-map-btn" class="mt-2 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-blue-600 dark:hover:bg-blue-700 flex items-center justify-center">
+                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" id="loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <i class="fas fa-search-location mr-1" id="search-icon"></i>
+                            <span id="button-text">Carregar Endereço no Mapa</span>
                         </button>
                     </div>
                     <div class="mb-6">
