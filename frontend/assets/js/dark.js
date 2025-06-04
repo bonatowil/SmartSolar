@@ -1,32 +1,22 @@
-    var themeToggleBtn = document.getElementById('theme-toggle');
-    var htmlElement = document.documentElement; // Seleciona o elemento <html>
+var themeToggleBtn = document.getElementById('theme-toggle');
+var htmlEl = document.documentElement;
 
-    // Função para aplicar o tema
-    function applyTheme(theme) {
-        if (theme === 'dark') {
-            htmlElement.classList.add('dark');
-            localStorage.setItem('theme', 'dark');
-        } else {
-            htmlElement.classList.remove('dark');
-            localStorage.setItem('theme', 'light');
-        }
-    }
-
-    // Verifica o tema salvo no localStorage ou a preferência do sistema
-    var savedTheme = localStorage.getItem('theme');
-    var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-    if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-        applyTheme('dark');
+function applyTheme(theme) {
+    if (theme === 'dark') {
+    htmlEl.classList.add('dark');
+    localStorage.setItem('theme', 'dark');
     } else {
-        applyTheme('light');
+    htmlEl.classList.remove('dark');
+    localStorage.setItem('theme', 'light');
     }
+}
 
-    // Adiciona o evento de clique ao botão
-    themeToggleBtn.addEventListener('click', function() {
-        if (htmlElement.classList.contains('dark')) {
-            applyTheme('light');
-        } else {
-            applyTheme('dark');
-        }
-    });
+// (Opcional) podemos checar novamente qual o tema atual e garantir que o botão fique em sincronia
+// mas já resolvemos isso no script inline. Aqui só vamos mesmo alternar sob clique:
+themeToggleBtn.addEventListener('click', function() {
+    if (htmlEl.classList.contains('dark')) {
+    applyTheme('light');
+    } else {
+    applyTheme('dark');
+    }
+});

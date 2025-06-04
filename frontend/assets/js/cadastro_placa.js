@@ -1,4 +1,4 @@
-// ../assets/js/cadastro-placa.js
+// ../assets/js/cadastro_placa.js
 
 document.addEventListener('DOMContentLoaded', () => {
 

@@ -9,17 +9,15 @@
     <link rel="stylesheet" href="../assets/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-          crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.css" />
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
     <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script>
+    <script src="../assets/js/verifica_usuario.js"></script>
+    <script src="../assets/js/check_theme.js"></script>
 </head>
 <body class="flex flex-col min-h-screen dark:bg-gray-900">
 
@@ -55,13 +53,11 @@
     </header>
 
     <main class="container mx-auto mt-8 p-4 flex-grow">
-
         <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
             <i class="fas fa-drafting-compass mr-2"></i> Simulador Solar SmarSolar
         </h1>
 
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-
             <div class="lg:col-span-1 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 h-fit">
                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-5 border-b pb-2 dark:border-gray-600">
                     <i class="fas fa-edit mr-2"></i> 1. Insira seus Dados
@@ -77,37 +73,35 @@
                         </button>
                     </div>
                     <div class="mb-6">
-                        <label for="avg-bill" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Gasto Médio Mensal com Energia (R$):</label>
+                        <label for="gasto-medio" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Valor médio mensal da conta de energia (R$):</label>
                          <div class="relative">
                              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">R$</div>
-                             <input type="number" id="avg-bill" name="avg-bill" 
+                             <input type="number" id="gasto-medio" name="gasto-medio" 
                                     class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                     placeholder="350.00" step="0.01" required>
                          </div>
                     </div>
 
                     <div class="mb-6">
-                        <label for="avg-bill" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">KW por hora</label>
+                        <label for="consumo-medio" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Consumo médio mensal de energia (kWh):</label>
                          <div class="relative">
                              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">KW</div>
-                             <input type="number" id="avg-bill" name="avg-bill" 
+                             <input type="number" id="consumo-medio" name="consumo-medio" 
                                     class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                     placeholder="10.63" step="0.01" required>
                          </div>
                     </div>
 
                     <div class="mb-6">
-                        <label for="avg-bill" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Custo por KW</label>
+                        <label for="tarifa" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Tarifa de energia (R$/kWh)</label>
                          <div class="relative">
                              <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">R$</div>
-                             <input type="number" id="avg-bill" name="avg-bill" 
+                             <input type="number" id="tarifa" name="tarifa" 
                                     class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
                                     placeholder="50.00" step="0.01" required>
                          </div>
                     </div>
-
-
-                    </form>
+                </form>
             </div>
 
             <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
@@ -118,23 +112,23 @@
                     Após carregar o endereço, use as ferramentas de desenho <i class="fas fa-vector-square"></i> (que aparecerão no mapa) para delimitar a área do telhado onde deseja instalar as placas.
                 </p>
                 <div id="map-wrapper">
-    <div id="map-placeholder" class="bg-gray-100 dark:bg-gray-700 p-6 rounded h-96 flex items-center justify-center text-gray-500 dark:text-gray-400">
-        <i class="fas fa-map text-6xl mr-4"></i>
-        <span>Carregue um endereço para visualizar o mapa.</span>
-    </div>
+                <div id="map-placeholder" class="bg-gray-100 dark:bg-gray-700 p-6 rounded h-96 flex items-center justify-center text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-map text-6xl mr-4"></i>
+                    <span>Carregue um endereço para visualizar o mapa.</span>
+                </div>
 
-    <div id="map" class="h-96 w-full rounded-lg" style="display: none;"></div>
-</div>
+                <div id="map" class="h-96 w-full rounded-lg" style="display: none;"></div>
+            </div>
                  <button type="button" id="calculate-btn" 
                          class="mt-6 w-full bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline text-lg transition duration-300
                                 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 flex items-center justify-center">
                     <i class="fas fa-cogs mr-2"></i> Calcular Potencial Solar
                  </button>
             </div>
-            
         </div>
 
-        <section class="mt-10 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700" id="results-section" style="display: none;"> <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-5 border-b pb-2 dark:border-gray-600">
+        <section class="mt-10 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700" id="results-section" style="display: none;"> 
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-5 border-b pb-2 dark:border-gray-600">
                 <i class="fas fa-poll mr-2"></i> 3. Resultados da Simulação
             </h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
@@ -170,11 +164,10 @@
             &copy; 2025 SmarSolar - Todos os direitos reservados.
         </p>
     </footer>
-    
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-    <script src="../assets/js/dark.js"></script>
     <script src="../assets/js/map.js"></script>
- 
+    <script src="../assets/js/calc.js"></script>
+    <script src="../assets/js/dark.js"></script>
 </body>
 </html>
