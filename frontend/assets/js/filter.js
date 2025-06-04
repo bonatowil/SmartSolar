@@ -46,23 +46,18 @@ document.addEventListener('DOMContentLoaded', () => {
             // Adapte as classes conforme necessário para o seu layout Tailwind
             card.className = 'product-card bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 flex flex-col';
             
-            // Ajuste os nomes dos campos para corresponderem aos dados da SUA API
-            const nomeCompleto = `${placa.marca || ''} ${placa.modelo || 'Produto Solar'}`.trim();
-            const imagem = '../assets/images/imagem-padrao-placa.jpg'; 
-            const descricao = placa.descricao || 'Descrição não disponível.';
-            const precoFormatado = typeof placa.preco === 'number' ? `R$ ${placa.preco.toFixed(2)}` : 'Preço indisponível';
-            const categoriaPlaca = placa.tipo || 'Não especificado'; // Usando 'tipo' da API como categoria
+
 
             card.innerHTML = `
-                <img src="${imagem}" alt="${nomeCompleto}" class="h-48 w-full object-cover">
+                <img src="${imagem}" alt="${placa.marca}" class="h-48 w-full object-cover">
                 <div class="p-5 flex-1 flex flex-col justify-between">
                     <div>
-                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">${nomeCompleto}</h3>
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Categoria: ${categoriaPlaca}</p>
-                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 flex-grow">${descricao}</p>
+                        <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">${placa.marca}</h3>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Categoria: ${placa.modelo}</p>
+                        <p class="text-sm text-gray-700 dark:text-gray-300 mb-4 flex-grow">${placa.descricao}</p>
                     </div>
                     <div class="flex items-center justify-between mt-auto pt-3 border-t dark:border-gray-700">
-                        <span class="font-bold text-xl text-green-600 dark:text-green-500">${precoFormatado}</span>
+                        <span class="font-bold text-xl text-green-600 dark:text-green-500">${placa.preco}</span>
                         <button class="bg-green-500 hover:bg-green-600 text-white font-bold py-1 px-3 rounded-md text-sm">Detalhes</button>
                     </div>
                 </div>
@@ -131,7 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Agora, aplica o filtro de categoria NO FRONTEND, se uma categoria foi selecionada
             let produtosParaRenderizar = todosOsProdutosDaAPI;
             if (categoriaFrontend) {
-                produtosParaRenderizar = todosOsProdutosDaAPI.filter(prod => prod.tipo === categoriaFrontend);
+                produtosParaRenderizar = todosOsProdutosDaAPI.filter(prod => prod.modelo === categoriaFrontend);
             }
             
             renderProducts(produtosParaRenderizar);

@@ -94,8 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 productGrid.style.display = 'grid';
                 placas.forEach(placa => {
                     const marca = placa.marca || 'Marca não informada';
-                    const modelo = placa.modelo || 'Modelo não informado';
-                    const tipo = placa.tipo || 'Tipo não especificado';
+                    const modelo = placa.modelo || 'Tipo não especificado';
                     const descricao = placa.descricao || 'Descrição não disponível.';
                     const preco = typeof placa.preco === 'number' ? placa.preco.toFixed(2) : 'N/A';
                     const imagemSrc = '../assets/images/'
@@ -104,8 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         <div class="product-card bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700 flex flex-col">
                             <img src="${imagemSrc}" alt="${modelo}" class="w-full h-48 object-cover">
                             <div class="p-5 flex flex-col flex-grow">
-                                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">${marca} ${modelo}</h3>
-                                <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">${tipo}</p>
+                                <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-2">${marca}</h3>
+                                <p class="text-sm text-gray-500 dark:text-gray-400 mb-3">${modelo}</p>
                                 <p class="text-gray-700 dark:text-gray-300 mb-4 flex-grow text-sm leading-relaxed">
                                     ${descricao}
                                 </p>

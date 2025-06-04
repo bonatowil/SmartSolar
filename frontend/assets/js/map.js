@@ -1,51 +1,55 @@
+// ../assets/js/map.js
 document.addEventListener('DOMContentLoaded', function () {
     const loadMapBtn = document.getElementById('load-map-btn');
     const addressInput = document.getElementById('address');
     const mapPlaceholder = document.getElementById('map-placeholder');
     const mapDiv = document.getElementById('map');
 
-    // Elementos do botão para o estado de carregamento
     const loadingSpinner = document.getElementById('loading-spinner');
     const searchIcon = document.getElementById('search-icon');
-    const buttonText = document.getElementById('button-text'); // Span que contém o texto do botão
+    const buttonText = document.getElementById('button-text');
 
-    let map = null;         // Guarda instância do Leaflet
-    let drawnItems = null;  // Guarda camada de desenho
+    let map = null;
+    let drawnItems = null;
 
-    // Função que inicializa ou reposiciona o mapa
     function initializeMap(lat, lon) {
+        // Limpa a área desenhada anterior do localStorage ao inicializar/reposicionar o mapa
+        localStorage.removeItem('areaDesenhada'); 
+        // Ou, se preferir, localStorage.setItem('areaDesenhada', '0');
+        
+        // Atualiza o campo de resultado da área para "-- m²" se ele existir nesta página
+        const resultAreaElement = document.getElementById('result-area');
+        if (resultAreaElement) {
+            resultAreaElement.textContent = '-- m²';
+        }
+
+
         if (map) {
-            // Se já existe mapa, faz apenas setView para a nova coordenada
-            map.setView([lat, lon], 17);
+            map.setView([lat, lon], 18); // Aumentei o zoom para melhor visualização de telhados
             return;
         }
 
-        // Se ainda não existe mapa, esconde placeholder e mostra #map
         mapPlaceholder.style.display = 'none';
         mapDiv.style.display = 'block';
+        map = L.map('map').setView([lat, lon], 18);
 
-        // Cria o mapa apontando para [lat, lon], zoom 17
-        map = L.map('map').setView([lat, lon], 17);
-
-        // Adiciona camada de tile do OpenStreetMap
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
             attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
-            maxZoom: 18 // Ou até mais, dependendo da região
+            maxZoom: 20 // Aumentado para permitir mais zoom em imagens de satélite
         }).addTo(map);
 
-        // Cria FeatureGroup para desenhos
         drawnItems = new L.FeatureGroup();
         map.addLayer(drawnItems);
 
-        // Configura controle de desenho (Leaflet.draw)
         const drawControl = new L.Control.Draw({
-            edit: {
-                featureGroup: drawnItems
-            },
+            edit: { featureGroup: drawnItems },
             draw: {
-                polygon: true,
+                polygon: {
+                    allowIntersection: false,
+                    shapeOptions: { color: '#38A169' } // Verde para o polígono
+                },
+                rectangle: { shapeOptions: { color: '#38A169' } },
                 polyline: false,
-                rectangle: true,
                 circle: false,
                 marker: false,
                 circlemarker: false
@@ -53,107 +57,119 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         map.addControl(drawControl);
 
-        // Ao criar o desenho, limpa desenhos anteriores e calcula área
         map.on(L.Draw.Event.CREATED, function (event) {
             const layer = event.layer;
             drawnItems.clearLayers();
             drawnItems.addLayer(layer);
 
-            // Calcula área em m²
             const area = L.GeometryUtil.geodesicArea(layer.getLatLngs()[0]);
-            console.log(`Área desenhada: ${area.toFixed(2)} m²`);
+            console.log(`Área desenhada (map.js): ${area.toFixed(2)} m²`);
 
-            // Exibe resultado (supondo que exista #result-area e #results-section)
-            document.getElementById('result-area').textContent = `${area.toFixed(2)} m²`;
-            document.getElementById('results-section').style.display = 'block';
+            // SALVA A ÁREA NO LOCALSTORAGE para calc.js usar
+            localStorage.setItem('areaDesenhada', area.toFixed(2));
+
+            // Atualiza o campo de resultado da área (se ele estiver visível e for parte desta UI)
+            // O calc.js também fará isso quando exibir os resultados completos.
+            if (resultAreaElement && document.getElementById('results-section') && document.getElementById('results-section').style.display === 'block') {
+                 resultAreaElement.textContent = `${area.toFixed(2)} m²`;
+            }
+            alert(`Área selecionada: ${area.toFixed(2)} m². Agora preencha os outros dados e clique em "Calcular Potencial Solar".`);
         });
     }
 
-    // Regex para identificar CEP válido (8 dígitos com ou sem hífen)
     function isCep(value) {
         return /^\d{5}-?\d{3}$/.test(value);
     }
 
-    // Função para controlar o estado de carregamento do botão
     function setButtonLoadingState(isLoading) {
+        if (!loadMapBtn) return; // Garante que o botão existe
+        loadMapBtn.disabled = isLoading;
         if (isLoading) {
-            loadMapBtn.disabled = true;
-            if(searchIcon) searchIcon.classList.add('hidden'); // Verifica se o elemento existe
-            if(buttonText) buttonText.textContent = 'Carregando...'; // Altera o texto
+            if(searchIcon) searchIcon.style.display = 'none';
+            if(buttonText) buttonText.textContent = 'Carregando...';
             if(loadingSpinner) loadingSpinner.classList.remove('hidden');
         } else {
-            loadMapBtn.disabled = false;
-            if(searchIcon) searchIcon.classList.remove('hidden');
-            if(buttonText) buttonText.textContent = 'Carregar Endereço no Mapa'; // Restaura o texto
+            if(searchIcon) searchIcon.style.display = 'inline-block'; // Ou 'block' dependendo do seu CSS
+            if(buttonText) buttonText.textContent = 'Carregar Endereço no Mapa';
             if(loadingSpinner) loadingSpinner.classList.add('hidden');
         }
     }
 
-    loadMapBtn.addEventListener('click', async () => {
-        const inputValue = addressInput.value.trim();
-        if (!inputValue) {
-            alert('Por favor, insira um CEP ou endereço.');
-            return;
-        }
+    if (loadMapBtn) {
+        loadMapBtn.addEventListener('click', async () => {
+            const inputValue = addressInput.value.trim();
+            if (!inputValue) {
+                alert('Por favor, insira um CEP ou endereço.');
+                return;
+            }
+            setButtonLoadingState(true);
+            try {
+                if (isCep(inputValue)) {
+                    const cep = inputValue.replace('-', '');
+                    // Lembre-se de adicionar a lógica de autenticação aqui se o endpoint /calculo/endereco for protegido
+                    // Por exemplo, usando Basic Auth como nos outros scripts:
+                    const email = localStorage.getItem('userEmail');
+                    const password = localStorage.getItem('userPassword');
+                    let authHeaderLocal = '';
+                    if (email && password) {
+                        authHeaderLocal = 'Basic ' + btoa('admin:admin');
+                    } else {
+                        // Considerar alertar ou impedir se a autenticação for estritamente necessária
+                        console.warn("Credenciais não encontradas para buscar CEP, tentando como público.");
+                    }
 
-        setButtonLoadingState(true); // MOSTRAR PROGRESSO
-
-        try {
-            // Se for CEP, chama a API interna; se não, faz GeoSearch por endereço
-            if (isCep(inputValue)) {
-                const cep = inputValue.replace('-', '');
-                try {
                     const response = await fetch(
                         `http://localhost:8080/calculo/endereco?cep=${encodeURIComponent(cep)}`, {
                             headers: {
                                 'Content-Type': 'application/json',
-                                'Authorization': 'Basic ' + btoa('admin:admin') // Cuidado com credenciais hardcoded em produção
+                                ...(authHeaderLocal && { 'Authorization': authHeaderLocal }) // Adiciona Authorization se existir
                             }
                         }
                     );
 
                     if (response.status === 200) {
                         const data = await response.json();
-                        const lat = data.latitude;
-                        const lon = data.longitude;
-
-                        if (lat == null || lon == null) {
-                            alert('A API não retornou latitude/longitude para o CEP informado.');
-                            // Não precisa de return aqui, o finally cuidará do botão
+                        if (data.latitude == null || data.longitude == null) { // Verifica por null ou undefined
+                            alert('A API não retornou latitude/longitude para o CEP informado. Tentando busca por endereço...');
+                            await buscarPorEnderecoCompleto(inputValue); // Tenta como endereço completo
                         } else {
-                            console.log(`CEP encontrado: Lat ${lat}, Lon ${lon}`);
-                            initializeMap(lat, lon);
+                            console.log(`CEP encontrado: Lat ${data.latitude}, Lon ${data.longitude}`);
+                            initializeMap(data.latitude, data.longitude);
                         }
                     } else if (response.status === 404) {
-                        alert('CEP não encontrado.');
-                    } else if (response.status === 500) {
-                        alert('Erro interno ao buscar pelas coordenadas (500).');
+                        alert('CEP não encontrado. Tentando busca por endereço completo...');
+                        await buscarPorEnderecoCompleto(inputValue); // Tenta como endereço completo
                     } else {
-                        alert(`Erro inesperado ao buscar CEP (status ${response.status}). Tente novamente.`);
+                        alert(`Erro ao buscar CEP (status ${response.status}). Tente o endereço completo.`);
                     }
-                } catch (error) {
-                    console.error('Erro ao chamar API de CEP:', error);
-                    alert('Ocorreu um erro ao buscar o CEP. Verifique sua conexão ou se o servidor local está rodando.');
+                } else {
+                    await buscarPorEnderecoCompleto(inputValue);
                 }
-            } else {
-                // Não é CEP: assume que é endereço completo e usa GeoSearch
-                const provider = new GeoSearch.OpenStreetMapProvider();
-                try {
-                    const results = await provider.search({ query: inputValue });
-                    if (results && results.length > 0) {
-                        const { y: lat, x: lon } = results[0]; // y=latitude, x=longitude
-                        console.log(`Endereço encontrado: Lat ${lat}, Lon ${lon}`);
-                        initializeMap(lat, lon);
-                    } else {
-                        alert('Endereço não encontrado. Tente ser mais específico.');
-                    }
-                } catch (error) {
-                    console.error('Erro ao buscar endereço via GeoSearch:', error);
-                    alert('Ocorreu um erro ao buscar o endereço. Verifique sua conexão.');
-                }
+            } catch (error) {
+                console.error('Erro no processo de carregar mapa:', error);
+                alert('Ocorreu um erro ao processar o endereço. Verifique os dados e sua conexão.');
+            } finally {
+                setButtonLoadingState(false);
             }
-        } finally {
-            setButtonLoadingState(false); // ESCONDER PROGRESSO (SEMPRE)
+        });
+    } else {
+        console.warn("Botão 'load-map-btn' não encontrado.");
+    }
+
+    async function buscarPorEnderecoCompleto(endereco) {
+        const provider = new GeoSearch.OpenStreetMapProvider();
+        try {
+            const results = await provider.search({ query: endereco });
+            if (results && results.length > 0) {
+                const { y: lat, x: lon } = results[0];
+                console.log(`Endereço encontrado via GeoSearch: Lat ${lat}, Lon ${lon}`);
+                initializeMap(lat, lon);
+            } else {
+                alert('Endereço não encontrado. Tente ser mais específico ou verifique o CEP.');
+            }
+        } catch (error) {
+            console.error('Erro ao buscar endereço via GeoSearch:', error);
+            alert('Ocorreu um erro ao buscar o endereço. Verifique sua conexão.');
         }
-    });
+    }
 });
