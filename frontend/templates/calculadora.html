@@ -1,40 +1,51 @@
 <!DOCTYPE html>
-<html lang="pt-br" class=""> 
-    <head>
+<html lang="pt-br" class="">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SmarSolar - Calculadora</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="../assets/css/styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="../assets/css/styles.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.css" />
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.css" />
+    <!-- Adicionar Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.draw/1.0.4/leaflet.draw.js"></script>
-    <script src="https://unpkg.com/leaflet-geosearch@3.11.0/dist/geosearch.umd.js"></script>
-    <script src="../assets/js/verifica_usuario.js"></script>
-    <script src="../assets/js/check_theme.js"></script>
+    <script src="../assets/js/verifica_usuario.js" defer></script>
+    <script src="../assets/js/check_theme.js" defer></script>
+
+    <style>
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+        #map-wrapper {
+             height: 450px; /* Ou ajuste conforme necessário */
+        }
+        .toastify-container { /* Garante que os toasts fiquem acima de outros elementos */
+            z-index: 9999 !important;
+        }
+        /* Estilo para inputs com ícones de prefixo R$ e KW (do seu código original) */
+        input[type="number"].pl-10 { padding-left: 2.75rem; }
+    </style>
 </head>
-<body class="flex flex-col min-h-screen dark:bg-gray-900">
+<body class="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
 
-    <header class="p-4 bg-gray-800 dark:bg-gray-900 shadow-lg">
+    <header class="p-4 bg-gray-800 dark:bg-gray-950 shadow-xl">
         <div class="container mx-auto flex justify-between items-center">
             <img src="../assets/images/Smart Solar.png" alt="SmartSolar Logo" class="h-10 md:h-12">
             <nav class="space-x-4 md:space-x-6 hidden md:flex">
-                <a href="home.html" class="text-white font-bold hover:text-green-400 dark:hover:text-green-500">Início</a>
-                <a href="calculadora.html" class="text-white font-bold hover:text-green-400 dark:hover:text-green-500 border-b-2 border-green-500 pb-1">Calculadora</a>
-                <a href="placas.html" class="text-white font-bold hover:text-green-400 dark:hover:text-green-500">Placas</a>
-                </nav>
+                <a href="home.html" class="text-gray-200 font-semibold hover:text-green-400 dark:hover:text-green-500 transition-colors">Início</a>
+                <a href="calculadora.html" class="text-white font-semibold hover:text-green-400 dark:hover:text-green-500 border-b-2 border-green-500 pb-1">Calculadora</a>
+                <a href="placas.html" class="text-gray-200 font-semibold hover:text-green-400 dark:hover:text-green-500 transition-colors">Placas</a>
+            </nav>
             <div class="flex items-center space-x-4">
-                 <button id="theme-toggle" type="button" class="text-gray-400 hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-700 rounded-lg text-sm p-2.5">
+                <button id="theme-toggle" type="button" class="text-gray-400 hover:text-white dark:hover:text-gray-300 focus:outline-none focus:ring-4 focus:ring-gray-700 dark:focus:ring-gray-600 rounded-lg text-sm p-2.5 transition-colors">
                     <svg id="moon-icon" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
                     <svg id="sun-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm0 14a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm8-7a1 1 0 01-1 1h-1a1 1 0 110-2h1a1 1 0 011 1zM3 10a1 1 0 01-1 1H1a1 1 0 110-2h1a1 1 0 011 1zM15.657 5.657a1 1 0 010 1.414l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 0zm-11.314 0a1 1 0 011.414 0l.707.707a1 1 0 01-1.414 1.414l-.707-.707a1 1 0 010-1.414zM15.657 14.343a1 1 0 01-1.414 0l-.707-.707a1 1 0 111.414-1.414l.707.707a1 1 0 010 1.414zm-11.314 0a1 1 0 010-1.414l.707-.707a1 1 0 111.414 1.414l-.707.707a1 1 0 01-1.414 0zM10 5a5 5 0 110 10 5 5 0 010-10z"></path></svg>
                 </button>
-                <a href="index.html" class="text-white bg-red-500 hover:bg-red-600 font-bold px-4 py-2 rounded-md text-sm">
+                <a href="index.html" class="text-white bg-red-600 hover:bg-red-700 font-bold px-4 py-2 rounded-md text-sm transition-colors">
                     Sair <i class="fas fa-sign-out-alt ml-1"></i>
                 </a>
                 <button data-collapse-toggle="mobile-menu-calc" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-gray-400 rounded-lg md:hidden hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-600" aria-controls="mobile-menu-calc" aria-expanded="false">
@@ -46,150 +57,244 @@
         <div class="hidden md:hidden" id="mobile-menu-calc">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 <a href="home.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Início</a>
-                <a href="calculadora.html" class="text-white block px-3 py-2 rounded-md text-base font-medium bg-green-600">Calculadora</a>
+                <a href="calculadora.html" class="text-white block px-3 py-2 rounded-md text-base font-medium bg-green-700">Calculadora</a>
                 <a href="placas.html" class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Placas</a>
             </div>
         </div>
     </header>
 
-    <main class="container mx-auto mt-8 p-4 flex-grow">
-        <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white mb-6">
-            <i class="fas fa-drafting-compass mr-2"></i> Simulador Solar SmarSolar
+    <main class="container mx-auto mt-10 p-4 flex-grow">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-10 text-center md:text-left">
+            <i class="fas fa-calculator mr-3 text-green-500"></i>Simulador Solar SmarSolar
         </h1>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div class="lg:col-span-1 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 h-fit">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-5 border-b pb-2 dark:border-gray-600">
-                    <i class="fas fa-edit mr-2"></i> 1. Insira seus Dados
-                </h2>
-                <form id="solar-form">
-                    <div class="mb-4">
-                        <label for="address" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Endereço Completo ou CEP:</label>
-                        <input type="text" id="address" name="address" 
-                               class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                               placeholder="Rua, Número, Cidade - Estado" required>
-                         <button type="button" id="load-map-btn" class="mt-2 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline dark:bg-blue-600 dark:hover:bg-blue-700 flex items-center justify-center">
-                            <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" id="loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <!-- Card de Localização (LINHA 1) -->
+        <section class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 border-b-2 border-blue-500 pb-3">
+                <i class="fas fa-map-pin mr-2 text-blue-500"></i> 1. Defina a Localização
+            </h2>
+            <div>
+                <label for="address" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Endereço Completo ou CEP para buscar no mapa:</label>
+                <div class="flex flex-col sm:flex-row sm:space-x-3">
+                    <input type="text" id="address" name="address"
+                           class="flex-grow shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-md w-full py-2.5 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500 mb-3 sm:mb-0"
+                           placeholder="Ex: Rua Exemplo, 123, Cidade - UF ou 00000-000" required>
+                    <button type="button" id="load-map-btn" class="sm:w-auto w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 px-6 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 dark:bg-blue-500 dark:hover:bg-blue-600 flex items-center justify-center transition-colors">
+                        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white hidden" id="loading-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <i class="fas fa-search-location mr-1" id="search-icon"></i>
-                            <span id="button-text">Carregar Endereço no Mapa</span>
-                        </button>
-                    </div>
-                     <div class="mb-6">
-                            <label for="placa-selecionada" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Escolha a Placa Solar:</label>
-                            <select id="placa-selecionada" name="placa-selecionada" 
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600" 
-                                    required>
-                                <option value="" disabled selected>Carregando placas...</option>
-                                </select>
-                    </div> 
-
-                    <div class="mb-6">
-                        <label for="qnt-placa" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Quantidade de placas:</label>
-                        <div class="relative">
-                            <input type="number" id="qnt-placa" name="qnt-placa" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                placeholder="0" required>
-                        </div>
-                    </div>
-
-                    <div class="mb-6">
-                        <label for="gasto-medio" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Valor médio mensal da conta de energia (R$):</label>
-                         <div class="relative">
-                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">R$</div>
-                             <input type="number" id="gasto-medio" name="gasto-medio" 
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                    placeholder="350.00" step="0.01" required>
-                         </div>
-                    </div>
-
-                    <div class="mb-6">
-                        <label for="consumo-medio" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Consumo médio mensal de energia (kWh):</label>
-                         <div class="relative">
-                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">KW</div>
-                             <input type="number" id="consumo-medio" name="consumo-medio" 
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                    placeholder="10.63" step="0.01" required>
-                         </div>
-                    </div>
-
-                    <div class="mb-6">
-                        <label for="tarifa" class="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2">Tarifa de energia (R$/kWh)</label>
-                         <div class="relative">
-                             <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">R$</div>
-                             <input type="number" id="tarifa" name="tarifa" 
-                                    class="shadow appearance-none border rounded w-full py-2 px-3 pl-10 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 bg-white dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400" 
-                                    placeholder="50.00" step="0.01" required>
-                         </div>
-                    </div>
-                </form>
-            </div>
-
-            <div class="lg:col-span-2 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700">
-                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-5 border-b pb-2 dark:border-gray-600">
-                    <i class="fas fa-map-marker-alt mr-2"></i> 2. Selecione a Área no Mapa
-                </h2>
-                <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
-                    Após carregar o endereço, use as ferramentas de desenho <i class="fas fa-vector-square"></i> (que aparecerão no mapa) para delimitar a área do telhado onde deseja instalar as placas.
-                </p>
-                <div id="map-wrapper">
-                <div id="map-placeholder" class="bg-gray-100 dark:bg-gray-700 p-6 rounded h-96 flex items-center justify-center text-gray-500 dark:text-gray-400">
-                    <i class="fas fa-map text-6xl mr-4"></i>
-                    <span>Carregue um endereço para visualizar o mapa.</span>
+                        </svg>
+                        <i class="fas fa-search-location mr-2" id="search-icon"></i>
+                        <span id="button-text">Buscar</span>
+                    </button>
                 </div>
-
-                <div id="map" class="h-96 w-full rounded-lg" style="display: none;"></div>
-            </div>
-                 <button type="button" id="calculate-btn" 
-                         class="mt-6 w-full bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg focus:outline-none focus:shadow-outline text-lg transition duration-300
-                                dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 flex items-center justify-center">
-                    <i class="fas fa-cogs mr-2"></i> Calcular Potencial Solar
-                 </button>
-            </div>
-        </div>
-
-        <section class="mt-10 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700" id="results-section" style="display: none;"> 
-            <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-5 border-b pb-2 dark:border-gray-600">
-                <i class="fas fa-poll mr-2"></i> 3. Resultados da Simulação
-            </h2>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                <div class="result-box">
-                    <h4><i class="fas fa-ruler-combined"></i> Área Selecionada</h4>
-                    <p id="result-area">-- m²</p>
-                </div>
-                <div class="result-box">
-                    <h4><i class="fas fa-solar-panel"></i> Painéis</h4>
-                    <p id="result-panels">--</p>
-                </div>
-                <div class="result-box">
-                    <h4><i class="fas fa-dollar-sign"></i> Custo Estimado</h4>
-                    <p id="result-cost">R$ --</p>
-                </div>
-                <div class="result-box">
-                    <h4><i class="fas fa-undo-alt"></i> Retorno (ROI)</h4>
-                    <p id="result-roi">-- anos</p>
-                </div>
-            </div>
-            <div class="mt-8 p-4 border-t dark:border-gray-600">
-                 <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Projeção (Gráficos)</h3>
-                 <div id="charts-container" class="bg-gray-100 dark:bg-gray-700 p-6 rounded h-64 flex items-center justify-center text-gray-500 dark:text-gray-400">
-                    (Espaço para Gráficos Interativos - Ex: Chart.js)
-                 </div>
             </div>
         </section>
 
+        <!-- Card do Mapa (LINHA 2) -->
+        <section class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 border-b-2 border-green-500 pb-3">
+                <i class="fas fa-map-marked-alt mr-2 text-green-500"></i> 2. Selecione a Área de Instalação
+            </h2>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                Após buscar o endereço, use as ferramentas de desenho <i class="fas fa-draw-polygon"></i> (no canto do mapa) para delimitar a área do telhado.
+            </p>
+            <div id="map-wrapper" class="w-full rounded-lg overflow-hidden shadow-md border border-gray-200 dark:border-gray-700">
+                <div id="map-placeholder" class="bg-gray-100 dark:bg-gray-700 p-6 h-full flex flex-col items-center justify-center text-center text-gray-500 dark:text-gray-400">
+                    <i class="fas fa-map-signs text-6xl mb-4 text-gray-400 dark:text-gray-500"></i>
+                    <span class="font-medium">Busque um endereço para visualizar o mapa interativo.</span>
+                    <span class="text-xs mt-1">Você poderá desenhar diretamente sobre a imagem de satélite.</span>
+                </div>
+                <div id="map" style="display: none;"></div>
+            </div>
+
+            <div id="drawn-area-display" class="mt-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg border border-gray-300 dark:border-gray-600 shadow-sm" style="display: none;">
+                <p class="text-md font-medium text-gray-700 dark:text-gray-200 flex items-center">
+                    <i class="fas fa-vector-square mr-3 text-blue-500 dark:text-blue-400"></i> Área Desenhada:
+                    <span id="map-drawn-area-value" class="ml-2 font-bold text-lg text-green-600 dark:text-green-400">-- m²</span>
+                </p>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    Esta é a área que você delimitou no mapa. Ajuste se necessário ou prossiga.
+                </p>
+            </div>
+            <div class="mt-8 flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                <button type="button" id="delete-area-btn"
+                        class="sm:w-auto w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg focus:outline-none focus:ring-4 focus:ring-red-500 focus:ring-opacity-50 dark:focus:ring-red-700 flex items-center justify-center text-lg transition-all duration-300 ease-in-out transform hover:scale-105"
+                        style="display: none;">
+                    <i class="fas fa-trash-alt mr-2"></i> Excluir Área
+                </button>
+            </div>
+        </section>
+
+        <!-- Card de Configuração do Sistema Fotovoltaico (LINHA 3) -->
+        <section
+        id="solar-panel-config-section"
+        class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-lg border border-gray-200 dark:border-gray-700 mb-8" 
+        >
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 border-b-2 border-yellow-500 pb-3 flex items-center">
+                <i class="fas fa-solar-panel text-yellow-500 mr-2 text-xl"></i> 3. Configuração do Sistema Fotovoltaico
+            </h2>
+
+            <div id="solar-panel-inputs" class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="space-y-6 mt-6">
+                <div>
+                    <label for="placa-selecionada" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Modelo da Placa Solar:
+                    </label>
+                    <div class="relative">
+                    <select
+                        id="placa-selecionada"
+                        name="placa-selecionada"
+                        required
+                        class="w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-white border border-gray-300 dark:border-gray-600 rounded-md py-2.5 px-3 pr-8 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm appearance-none"
+                    >
+                        <option value="" disabled selected>Carregando placas...</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
+                        <i class="fas fa-chevron-down text-gray-400"></i>
+                    </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="qnt-placa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                    Quantidade de Placas:
+                    </label>
+                    <input
+                    type="number"
+                    id="qnt-placa"
+                    name="qnt-placa"
+                    min="1"
+                    placeholder="1"
+                    required
+                    class="w-full bg-white dark:bg-gray-700 text-gray-700 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 border border-gray-300 dark:border-gray-600 rounded-md py-2.5 px-3 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 shadow-sm"
+                    >
+                </div>
+                </div>
+
+                <div>
+                <h3 class="text-lg font-medium text-gray-800 dark:text-white mb-4 flex items-center">
+                    <i class="fas fa-info-circle text-green-500 mr-2"></i> Detalhes da Placa
+                </h3>
+                <div id="selected-panel-details" class="bg-gray-50 dark:bg-gray-700 p-6 rounded-md shadow-inner space-y-3 text-gray-700 dark:text-gray-300 min-h-[150px]">
+                    <div class="flex items-center">
+                    <i class="fas fa-bolt text-yellow-500 w-5 text-center"></i>
+                    <span class="ml-3 text-sm"><strong>Potência:</strong></span>
+                    <span id="panel-power" class="ml-auto font-semibold text-sm text-gray-800 dark:text-white">-- W</span>
+                    </div>
+                    <div class="flex items-center">
+                    <i class="fas fa-ruler-combined text-blue-500 w-5 text-center"></i>
+                    <span class="ml-3 text-sm"><strong>Dimensões:</strong></span>
+                    <span id="panel-dimensions" class="ml-auto font-semibold text-sm text-gray-800 dark:text-white">--</span>
+                    </div>
+                    <div class="flex items-center">
+                    <i class="fas fa-percentage text-indigo-500 w-5 text-center"></i>
+                    <span class="ml-3 text-sm"><strong>Eficiência:</strong></span>
+                    <span id="panel-efficiency" class="ml-auto font-semibold text-sm text-gray-800 dark:text-white">-- %</span>
+                    </div>
+                    <p id="panel-details-placeholder" class="mt-4 text-xs text-gray-500 dark:text-gray-400 italic text-center">
+                    Selecione um modelo de placa para ver os detalhes.
+                    </p>
+                </div>
+                </div>
+            </div>
+        </section>
+
+         <!-- Card de Dados de Consumo (LINHA 4) -->
+        <section class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 h-fit mb-8">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-6 border-b-2 border-orange-500 pb-3">
+                <i class="fas fa-bolt mr-2 text-orange-500"></i> 4. Dados de Consumo
+            </h2>
+            <div class="space-y-4" id="consumption-data-inputs">
+                <div>
+                    <label for="gasto-medio" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Gasto Médio Mensal (R$):</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">R$</div>
+                        <input type="number" id="gasto-medio" name="gasto-medio" step="1" min="0"
+                                class="pl-10 shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-md w-full py-2.5 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500"
+                                placeholder="550.00" required>
+                    </div>
+                </div>
+                <div>
+                    <label for="consumo-medio" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Consumo Médio Mensal (kWh):</label>
+                    <div class="relative">
+                        <div class="absolute pl-20 inset-y-0 left-0 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">kWh</div>
+                        <input type="number" id="consumo-medio" name="consumo-medio" step="1" min="0"
+                                class="shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-md w-full py-2.5 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500"
+                                placeholder="100.00" required>
+                    </div>
+                </div>
+                <div>
+                    <label for="tarifa" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Tarifa de Energia (R$/kWh):</label>
+                    <div class="relative">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">R$</div>
+                        <input type="number" id="tarifa" name="tarifa" step="1" min="0"
+                                class="pl-10 shadow-sm appearance-none border border-gray-300 dark:border-gray-600 rounded-md w-full py-2.5 px-3 text-gray-700 dark:text-white leading-tight focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 bg-white dark:bg-gray-700 placeholder-gray-400 dark:placeholder-gray-500"
+                                placeholder="5.50" required>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- BOTÃO CALCULAR (LINHA 5) -->
+        <div class="my-10 text-center">
+            <button type="button" id="calculate-btn"
+                    class="w-full max-w-md mx-auto bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 px-8 rounded-lg focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 dark:focus:ring-green-700 flex items-center justify-center text-xl transition-all duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                <i class="fas fa-cogs mr-3"></i> Calcular
+            </button>
+        </div>
+
+        <!-- Card de Resultados da Simulação (LINHA 6) -->
+        <section class="bg-white dark:bg-gray-800 p-6 sm:p-8 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700" id="results-section" style="display: none;">
+            <h2 class="text-2xl font-semibold text-gray-900 dark:text-white mb-8 border-b-2 border-green-500 pb-3">
+                <i class="fas fa-chart-pie mr-2"></i> 6. Resultados da Simulação
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+                    <div class="text-blue-500 dark:text-blue-400 text-3xl mb-3"><i class="fas fa-ruler-combined"></i></div>
+                    <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Área Utilizável</h4>
+                    <p id="result-area" class="text-2xl font-bold text-gray-800 dark:text-white">-- m²</p>
+                </div>
+                <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+                    <div class="text-yellow-500 dark:text-yellow-400 text-3xl mb-3"><i class="fas fa-solar-panel"></i></div>
+                    <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Nº de Painéis</h4>
+                    <p id="result-panels" class="text-2xl font-bold text-gray-800 dark:text-white">--</p>
+                </div>
+                <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+                    <div class="text-green-500 dark:text-green-400 text-3xl mb-3"><i class="fas fa-hand-holding-usd"></i></div>
+                    <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Custo Estimado</h4>
+                    <p id="result-cost" class="text-2xl font-bold text-gray-800 dark:text-white">R$ --</p>
+                </div>
+                <div class="bg-gray-100 dark:bg-gray-700 p-6 rounded-lg shadow-md text-center hover:shadow-lg transition-shadow">
+                    <div class="text-purple-500 dark:text-purple-400 text-3xl mb-3"><i class="fas fa-chart-line"></i></div>
+                    <h4 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-1">Retorno (ROI)</h4>
+                    <p id="result-roi" class="text-2xl font-bold text-gray-800 dark:text-white">-- anos</p>
+                </div>
+            </div>
+            <div class="mt-10 pt-8 border-t border-gray-200 dark:border-gray-700">
+                <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 text-center">
+                    <i class="far fa-calendar-alt mr-2"></i> Projeção Detalhada (Gráficos)
+                </h3>
+                <div id="charts-container" class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg min-h-[20rem] flex items-center justify-center text-gray-500 dark:text-gray-400 border border-dashed border-gray-300 dark:border-gray-600">
+                    <!-- Canvas para o gráfico será adicionado aqui via JS -->
+                    <span>Gráficos interativos sobre economia e geração aparecerão aqui.</span>
+                </div>
+            </div>
+        </section>
     </main>
 
-    <footer class="bg-gray-800 dark:bg-gray-900 text-center p-4 mt-12">
+    <footer class="bg-gray-800 dark:bg-gray-950 text-center p-6 mt-16 border-t border-gray-700 dark:border-gray-800">
         <p class="text-sm text-gray-400 dark:text-gray-500">
-            &copy; 2025 SmarSolar - Todos os direitos reservados.
+            &copy; 2025 SmarSolar - Inovação em Energia Solar. Todos os direitos reservados.
         </p>
     </footer>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
-    <script src="../assets/js/map.js"></script>
-    <script src="../assets/js/calc.js"></script>
-    <script src="../assets/js/dark.js"></script>
-</body>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script defer src="../assets/js/utils.js"></script>
+    <script defer src="../assets/js/map.js"></script>
+    <script defer src="../assets/js/calc.js"></script>
+    <script defer src="../assets/js/dark.js"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA8XZY4V7HchLIebHUzYr9Y5_xLOiKPTYg&libraries=drawing,geometry,places&callback=initMapApp"></script>
+    </body>
 </html>
