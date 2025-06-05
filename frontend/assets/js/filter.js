@@ -110,14 +110,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             if (!response.ok) {
-                if (response.status === 401) {
-                    localStorage.removeItem('userEmail');
-                    localStorage.removeItem('userPassword');
-                    localStorage.removeItem('usuarioId');
-                    alert('Sua sessão expirou ou as credenciais são inválidas. Por favor, faça login novamente.');
-                    window.location.href = 'index.html';
-                    throw new Error('Não autorizado (401)');
-                }
                 throw new Error(`Erro na API: ${response.status}`);
             }
 

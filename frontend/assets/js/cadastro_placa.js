@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Verificação simples para campos vazios
         for (const key in placaData) {
             if (!placaData[key] && placaData[key] !== 0) { 
-                alert(`O campo "${key}" é obrigatório.`);
+                showAppToast(`O campo "${key}" é obrigatório.`, 'warning');
                 return;
             }
         }
@@ -37,13 +37,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = localStorage.getItem('userPassword');
 
         if (!email || !password) {
-            alert('Você não está logado. Por favor, faça o login para continuar.');
+            showAppToast('Você não está logado. Por favor, faça o login para continuar.', 'error');
             window.location.href = 'index.html'; 
             return;
         }
 
         try {
-            // 3. Faz a chamada fetch com o cabeçalho de autenticação
             const response = await fetch(`${API_BASE_URL}/placa/`, {
                 method: 'POST',
                 headers: {
@@ -53,31 +52,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(placaData)
             });
 
-            // 4. Trata a resposta
-            if (response.ok) { // Se o status for 200-299 (ex: 201 Created)
-                alert('Placa cadastrada com sucesso!');
-                // const placaCriada = await response.json(); // Se o backend retornar a placa criada
-                // console.log('Placa criada:', placaCriada);
+            if (response.ok) {
+                alert('Placa cadastrada com sucesso!');;
                 window.location.href = 'placas.html';
             } else {
-                if (response.status === 401) {
-                    localStorage.removeItem('userEmail');
-                    localStorage.removeItem('userPassword');
-                    localStorage.removeItem('usuarioId');
-                    alert('Sua sessão expirou ou as credenciais são inválidas. Por favor, faça login novamente.');
-                    window.location.href = 'index.html';
-                    throw new Error('Não autorizado (401)');
-                }
-                // Tenta ler uma mensagem de erro do backend
                 const errorData = await response.json().catch(() => ({ message: `Erro ${response.status} do servidor.` }));
                 throw new Error(errorData.message || `Erro na API: ${response.status}`);
             }
 
         } catch (error) {
             console.error('Erro no cadastro:', error);
-            // Não mostra o alerta se já foi redirecionado por 401
             if (error.message !== 'Não autorizado (401)') {
-                alert(`Não foi possível cadastrar a placa: ${error.message}`);
+                showAppToast(`Não foi possível cadastrar a placa: ${error.message}`, 'error');
             }
         }
     });

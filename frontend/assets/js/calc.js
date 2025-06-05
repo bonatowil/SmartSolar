@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     const option = document.createElement('option');
                     option.value = placa.placaId;
                     option.dataset.potencia = placa.potencia || 'N/A';
-                    option.dataset.dimensoes = placa.dimensoes || 'N/A';
+                    option.dataset.dimensoes = placa.dimensaoX + ' x ' + placa.dimensaoY + ' x ' + placa.dimensaoZ  || 'N/A';
                     option.dataset.eficiencia = placa.eficiencia || 'N/A';
                     option.textContent = `${placa.marca || 'Marca Desconhecida'} ${placa.modelo || 'Modelo Desconhecido'} - ${placa.potencia || 'N/A'}W`;
                     placaSelect.appendChild(option);

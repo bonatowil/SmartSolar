@@ -9,8 +9,7 @@
 function showAppToast(message, type = 'info', duration = 3000) {
     if (typeof Toastify === 'undefined') {
         console.error('Toastify JS não está carregado!');
-        // Fallback para alert se Toastify não estiver disponível
-        alert(`(${type.toUpperCase()}) ${message}`);
+        showAppToast(`(${type.toUpperCase()}) ${message}`, 'warning');
         return;
     }
 

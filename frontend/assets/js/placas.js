@@ -64,16 +64,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 6. Trata a resposta
             if (!response.ok) {
-                if (response.status === 401) {
-                    // Se deu 401 mesmo enviando o header, as credenciais podem ser inválidas/expiradas
-                    // Limpa credenciais potencialmente ruins e avisa o usuário
-                    localStorage.removeItem('userEmail');
-                    localStorage.removeItem('userPassword');
-                    localStorage.removeItem('usuarioId'); // Se você também salvou o ID
-                    alert('Sua sessão expirou ou as credenciais são inválidas. Por favor, faça login novamente.');
-                    window.location.href = 'index.html'; // Redireciona para o login
-                    throw new Error('Não autorizado (401)'); // Para a execução
-                }
                 throw new Error(`Erro na API: ${response.status}`);
             }
 

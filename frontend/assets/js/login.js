@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = passwordInput.value;
 
         if (!email || !password) {
-            alert('Por favor, preencha o e-mail e a senha.');
+            showAppToast('Por favor, preencha o e-mail e a senha.', 'warning');
             return;
         }
 
@@ -48,24 +48,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.warn('API de login não retornou um usuarioId esperado.');
                 }
                 
-                alert('Login realizado com sucesso!');
+                showAppToast('Login realizado com sucesso!', 'success');
                 window.location.href = 'home.html';
 
             } else {
                 // Se o status for 401 (Senha incorreta) ou 404 (Email não cadastrado)
                 if (response.status === 401 || response.status === 404) {
-                     alert('E-mail ou senha incorretos. Por favor, tente novamente.');
+                    showAppToast('E-mail ou senha incorretos. Por favor, tente novamente.', 'error');
                 } else {
                     // Outros erros do servidor
                     const errorText = await response.text(); // Tenta ler como texto se não for JSON
-                    alert(`Erro no login: ${response.status} - ${errorText || 'Tente novamente.'}`);
+                    showAppToast(`Erro no login: ${response.status} - ${errorText || 'Tente novamente.'}`, 'error');
                 }
             }
 
         } catch (error) {
             // Trata erros de conexão (servidor offline, CORS, etc.)
             console.error('Falha na comunicação com a API:', error);
-            alert('Não foi possível se conectar ao servidor. Verifique sua conexão.');
+            showAppToast('Não foi possível se conectar ao servidor. Verifique sua conexão.', 'error');
         }
     });
 });
