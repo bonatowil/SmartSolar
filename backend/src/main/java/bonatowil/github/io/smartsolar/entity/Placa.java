@@ -50,12 +50,9 @@ public class Placa {
     private double potencia;
 
     @Column(nullable = false)
-    private double tolerancia;
+    private double eficiencia;
 
-    @Column(nullable = false)
-    private double peso;
-
-    public Placa(String descricao, String marca, String modelo, Double dimensaoX, Double dimensaoY, Double dimensaoZ, double preco, double potencia, double tolerancia, double peso) {
+    public Placa(String descricao, String marca, String modelo, Double dimensaoX, Double dimensaoY, Double dimensaoZ, double preco, double potencia, double eficiencia) {
         this.ativo = true;
         this.descricao = descricao;
         this.marca = marca;
@@ -65,8 +62,7 @@ public class Placa {
         this.dimensaoZ = dimensaoZ;
         this.preco = preco;
         this.potencia = potencia;
-        this.tolerancia = tolerancia;
-        this.peso = peso;
+        this.eficiencia = eficiencia;
         int uniDimensao; // Marca qual a unidade utilizada para dimensão: < 100 = m | > 100 = cm | > 1000 = mm
         if (dimensaoX > 1000)
             uniDimensao = 1000;

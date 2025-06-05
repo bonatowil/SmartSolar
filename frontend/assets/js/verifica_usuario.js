@@ -1,4 +1,4 @@
 const usuarioId = localStorage.getItem('usuarioId');
 if (!usuarioId) {
-    // window.location.href = 'index.html';
+    window.location.href = 'index.html';
 }

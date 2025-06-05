@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmarSolar - Calculadora</title>
+    <title>SmartSolar - Calculadora</title>
+    <link rel="shortcut icon" href="../assets/images/Smart Solar.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/styles.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-<!-- Adicione esta linha para carregar ApexCharts -->
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3.0.1/dist/chartjs-plugin-annotation.min.js"></script>
 
     <script src="../assets/js/verifica_usuario.js" defer></script>
     <script src="../assets/js/check_theme.js" defer></script>
@@ -70,7 +71,7 @@
 
     <main class="container mx-auto mt-10 p-4 flex-grow">
         <h1 class="text-3xl md:text-4xl font-bold text-gray-800 dark:text-white mb-10 text-center md:text-left">
-            <i class="fas fa-calculator mr-3 text-green-500"></i>Simulador Solar SmarSolar
+            <i class="fas fa-calculator mr-3 text-green-500"></i>Simulador Solar SmartSolar
         </h1>
 
         <!-- Card de Localização (LINHA 1) -->
@@ -129,8 +130,11 @@
                     <i class="fas fa-trash-alt mr-2"></i> Excluir Área
                 </button>
             </div>
-            <div id="result-solar" style="margin-top: 1em; font-weight: bold;">
-            -- kWh/ano
+            <div id="result-solar" class="mt-4 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg border border-dashed border-gray-300 dark:border-gray-600" style="display: none;">
+                <p class="text-md font-medium text-gray-700 dark:text-gray-200 flex items-center justify-center">
+                    <i class="fas fa-sun mr-3 text-yellow-500 animate-pulse"></i>
+                    <span id="solar-potential-text">Aguardando desenho da área para obter dados solares...</span>
+                </p>
             </div>
         </section>
 
@@ -185,6 +189,11 @@
                     <i class="fas fa-info-circle text-green-500 mr-2"></i> Detalhes da Placa
                 </h3>
                 <div id="selected-panel-details" class="bg-gray-50 dark:bg-gray-700 p-6 rounded-md shadow-inner space-y-3 text-gray-700 dark:text-gray-300 min-h-[150px]">
+                    <div class="flex items-center">
+                    <i class="fas fa-dollar-sign text-green-500 w-5 text-center"></i>
+                    <span class="ml-3 text-sm"><strong>Preço Unitário:</strong></span>
+                    <span id="panel-price" class="ml-auto font-semibold text-sm text-gray-800 dark:text-white">R$ --</span>
+                    </div>
                     <div class="flex items-center">
                     <i class="fas fa-bolt text-yellow-500 w-5 text-center"></i>
                     <span class="ml-3 text-sm"><strong>Potência:</strong></span>
@@ -283,7 +292,7 @@
                 <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 text-center">
                     <i class="far fa-calendar-alt mr-2"></i> Projeção Detalhada (Gráficos)
                 </h3>
-                <div id="charts-container" class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg min-h-[20rem] flex items-center justify-center text-gray-500 dark:text-gray-400 border border-dashed border-gray-300 dark:border-gray-600">
+                <div id="charts-container" class="p-6 rounded-lg min-h-[20rem] flex items-center justify-center text-gray-500 dark:text-gray-400 border border-dashed border-gray-300 dark:border-gray-600">
                 </div>
             </div>
         </section>
@@ -291,7 +300,7 @@
 
     <footer class="bg-gray-800 dark:bg-gray-950 text-center p-6 mt-16 border-t border-gray-700 dark:border-gray-800">
         <p class="text-sm text-gray-400 dark:text-gray-500">
-            &copy; 2025 SmarSolar - Inovação em Energia Solar. Todos os direitos reservados.
+            &copy; 2025 SmartSolar - Inovação em Energia Solar. Todos os direitos reservados.
         </p>
     </footer>
 

@@ -20,6 +20,5 @@ public class PlacaDTO {
     private Double dimensaoZ;
     private double preco;
     private double potencia;
-    private double tolerancia;
-    private double peso;
+    private double eficiencia;
 }

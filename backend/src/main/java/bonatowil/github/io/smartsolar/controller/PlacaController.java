@@ -74,4 +74,43 @@ public class PlacaController {
         }
         return ResponseEntity.ok(placa);
     }
+
+    @Operation(summary = "Excluir uma placa por ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Placa excluída com sucesso"),
+            @ApiResponse(responseCode = "404", description = "Placa não encontrada", content = @Content)
+    })
+    @DeleteMapping("/{placaId}")
+    public ResponseEntity<Void> deletePlaca(@PathVariable("placaId") Long placaId) {
+        Placa placa = placaService.findById(placaId);
+        if (placa == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+        placaService.deletePlaca(placaId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @Operation(summary = "Atualizar uma placa existente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Placa atualizada com sucesso"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos para atualização", content = @Content),
+            @ApiResponse(responseCode = "404", description = "Placa não encontrada", content = @Content)
+    })
+    @PutMapping("/{placaId}")
+    public ResponseEntity<Placa> updatePlaca(@PathVariable("placaId") Long placaId, @RequestBody PlacaDTO placaDTO) {
+        Placa existingPlaca = placaService.findById(placaId);
+        if (existingPlaca == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
+        if (placaDTO.getDescricao() == null || placaDTO.getDescricao().isEmpty() ||
+                placaDTO.getModelo() == null || placaDTO.getModelo().isEmpty() ||
+                placaDTO.getMarca() == null || placaDTO.getMarca().isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Descrição, modelo e marca são obrigatórios.");
+        }
+
+        Placa updatedPlaca = placaService.updatePlaca(placaId, placaDTO);
+        return ResponseEntity.ok(updatedPlaca);
+    }
+
 }

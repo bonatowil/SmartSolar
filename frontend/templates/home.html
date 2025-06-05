@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmarSolar - Início</title>
+    <title>SmartSolar - Início</title>
+    <link rel="shortcut icon" href="../assets/images/Smart Solar.png" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/styles.css">
@@ -15,12 +16,11 @@
 </head>
 
 <body class="dark:bg-gray-900">
-
     <header class="p-4 bg-gray-800 dark:bg-gray-900 shadow-lg">
         <div class="container mx-auto flex justify-between items-center">
             <img src="../assets/images/Smart Solar.png" alt="SmartSolar Logo" class="h-10 md:h-12">
             <nav class="space-x-4 md:space-x-6 hidden md:flex">
-                <a href="home_app.html"
+                <a href="#"
                     class="text-white font-bold hover:text-green-400 dark:hover:text-green-500 border-b-2 border-green-500 pb-1">Início</a>
                 <a href="calculadora.html"
                     class="text-white font-bold hover:text-green-400 dark:hover:text-green-500">Calculadora</a>
@@ -59,7 +59,7 @@
         </div>
         <div class="hidden md:hidden" id="mobile-menu">
             <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                <a href="home_app.html"
+                <a href=""
                     class="text-white block px-3 py-2 rounded-md text-base font-medium bg-green-600">Início</a>
                 <a href="calculadora.html"
                     class="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Calculadora</a>
@@ -74,7 +74,7 @@
         <section
             class="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-xl mb-8 text-center border border-gray-200 dark:border-gray-700">
             <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-                ☀️ Bem-vindo(a) ao <span class="text-green-500">SmarSolar</span>!
+                ☀️ Bem-vindo(a) ao <span class="text-green-500">SmartSolar</span>!
             </h1>
             <p class="text-lg text-gray-600 dark:text-gray-300 mb-6">
                 Descubra o potencial solar do seu imóvel, simule custos, economia e ajude o planeta.
@@ -116,7 +116,7 @@
         <section
             class="bg-white dark:bg-gray-800 p-6 md:p-8 rounded-lg shadow-xl mb-8 border border-gray-200 dark:border-gray-700">
             <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 text-center md:text-left">
-                <i class="fas fa-solar-panel mr-2"></i> Conheça Nossos Modelos de Placas
+                <i class="fas fa-solar-panel mr-2"></i> Conheça os Modelos de Placas
             </h2>
 
             <div id="placas-carousel" class="relative w-full" data-carousel="slide">
@@ -124,8 +124,6 @@
                     <div class="hidden duration-700 ease-in-out" data-carousel-item>
                         <div
                             class="absolute block w-full h-full bg-gray-700 dark:bg-gray-900 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 p-6 flex flex-col justify-center items-center text-center">
-                            <img src="../assets/images/Silício Monocristalino.jpeg" alt="Silício Monocristalino"
-                                class="mb-4 rounded-lg shadow-md h-32 w-32 object-cover">
                             <h3 class="text-xl font-semibold text-white mb-2">Silício Monocristalino (Mono-Si)</h3>
                             <p class="text-gray-300 px-4">
                                 A mais alta eficiência energética e design uniforme. Ideal para espaços limitados com
@@ -137,8 +135,6 @@
                     <div class="hidden duration-700 ease-in-out" data-carousel-item>
                         <div
                             class="absolute block w-full h-full bg-gray-700 dark:bg-gray-900 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 p-6 flex flex-col justify-center items-center text-center">
-                            <img src="../assets/images/" alt="Silício Policristalino"
-                                class="mb-4 rounded-lg shadow-md h-32 w-32 object-cover">
                             <h3 class="text-xl font-semibold text-white mb-2">Silício Policristalino (Poly-Si)</h3>
                             <p class="text-gray-300 px-4">
                                 Excelente custo-benefício com boa eficiência. Uma escolha popular para instalações
@@ -150,8 +146,6 @@
                     <div class="hidden duration-700 ease-in-out" data-carousel-item>
                         <div
                             class="absolute block w-full h-full bg-gray-700 dark:bg-gray-900 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 p-6 flex flex-col justify-center items-center text-center">
-                            <img src="https://via.placeholder.com/150x150.png?text=a-Si" alt="Silício Amorfo"
-                                class="mb-4 rounded-lg shadow-md h-32 w-32 object-cover">
                             <h3 class="text-xl font-semibold text-white mb-2">Silício Amorfo (a-Si)</h3>
                             <p class="text-gray-300 px-4">
                                 Leves e flexíveis, com bom desempenho em baixa luminosidade, embora com menor eficiência
@@ -163,8 +157,6 @@
                     <div class="hidden duration-700 ease-in-out" data-carousel-item>
                         <div
                             class="absolute block w-full h-full bg-gray-700 dark:bg-gray-900 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 p-6 flex flex-col justify-center items-center text-center">
-                            <img src="https://via.placeholder.com/150x150.png?text=CdTe" alt="Telureto de Cádmio"
-                                class="mb-4 rounded-lg shadow-md h-32 w-32 object-cover">
                             <h3 class="text-xl font-semibold text-white mb-2">Telureto de Cádmio (CdTe)</h3>
                             <p class="text-gray-300 px-4">
                                 Painéis de filme fino com baixo custo de produção e bom desempenho em climas quentes.
@@ -175,8 +167,6 @@
                     <div class="hidden duration-700 ease-in-out" data-carousel-item>
                         <div
                             class="absolute block w-full h-full bg-gray-700 dark:bg-gray-900 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 p-6 flex flex-col justify-center items-center text-center">
-                            <img src="https://via.placeholder.com/150x150.png?text=CIGS" alt="CIGS"
-                                class="mb-4 rounded-lg shadow-md h-32 w-32 object-cover">
                             <h3 class="text-xl font-semibold text-white mb-2">Cobre, Índio, Gálio e Selênio (CIGS)</h3>
                             <p class="text-gray-300 px-4">
                                 Filme fino com alta eficiência potencial e boa tolerância à sombra, além de serem
@@ -188,8 +178,6 @@
                     <div class="hidden duration-700 ease-in-out" data-carousel-item>
                         <div
                             class="absolute block w-full h-full bg-gray-700 dark:bg-gray-900 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 p-6 flex flex-col justify-center items-center text-center">
-                            <img src="https://via.placeholder.com/150x150.png?text=OPV" alt="Orgânicas"
-                                class="mb-4 rounded-lg shadow-md h-32 w-32 object-cover">
                             <h3 class="text-xl font-semibold text-white mb-2">Orgânicas (OPV)</h3>
                             <p class="text-gray-300 px-4">
                                 Tecnologia emergente, ultra-leves, transparentes e flexíveis, ideais para integração
@@ -201,8 +189,6 @@
                     <div class="hidden duration-700 ease-in-out" data-carousel-item>
                         <div
                             class="absolute block w-full h-full bg-gray-700 dark:bg-gray-900 -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 p-6 flex flex-col justify-center items-center text-center">
-                            <img src="https://via.placeholder.com/150x150.png?text=HJT" alt="Híbridos"
-                                class="mb-4 rounded-lg shadow-md h-32 w-32 object-cover">
                             <h3 class="text-xl font-semibold text-white mb-2">Híbridos (HJT)</h3>
                             <p class="text-gray-300 px-4">
                                 Combinam o melhor do silício cristalino e amorfo, resultando em altíssima eficiência e
@@ -261,9 +247,9 @@
 
     </main>
 
-    <footer class="bg-gray-800 dark:bg-gray-900 text-center p-4 mt-12">
+    <footer class="fixed bottom-0 left-0 w-full bg-gray-800 dark:bg-gray-900 text-center p-4">
         <p class="text-sm text-gray-400 dark:text-gray-500">
-            &copy; 2025 SmarSolar - Todos os direitos reservados.
+        &copy; 2025 SmartSolar - Todos os direitos reservados.
         </p>
     </footer>
 
