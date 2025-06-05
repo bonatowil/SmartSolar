@@ -8,9 +8,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/css/styles.css"> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-
-    <!-- Adicionar Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+<!-- Adicione esta linha para carregar ApexCharts -->
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
     <script src="../assets/js/verifica_usuario.js" defer></script>
     <script src="../assets/js/check_theme.js" defer></script>
@@ -21,13 +20,19 @@
             width: 100%;
         }
         #map-wrapper {
-             height: 450px; /* Ou ajuste conforme necessário */
+             height: 450px;
         }
-        .toastify-container { /* Garante que os toasts fiquem acima de outros elementos */
+        .toastify-container {
             z-index: 9999 !important;
         }
-        /* Estilo para inputs com ícones de prefixo R$ e KW (do seu código original) */
-        input[type="number"].pl-10 { padding-left: 2.75rem; }
+        input[type="number"].pl-10 {
+            padding-left: 2.75rem;
+        }
+        /* Garante que o <canvas> ou o SVG do ApexCharts não tenha fundo branco */
+        #charts-container svg, 
+        #charts-container canvas {
+            background-color: transparent !important;
+        }
     </style>
 </head>
 <body class="flex flex-col min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -276,8 +281,6 @@
                     <i class="far fa-calendar-alt mr-2"></i> Projeção Detalhada (Gráficos)
                 </h3>
                 <div id="charts-container" class="bg-gray-50 dark:bg-gray-700/50 p-6 rounded-lg min-h-[20rem] flex items-center justify-center text-gray-500 dark:text-gray-400 border border-dashed border-gray-300 dark:border-gray-600">
-                    <!-- Canvas para o gráfico será adicionado aqui via JS -->
-                    <span>Gráficos interativos sobre economia e geração aparecerão aqui.</span>
                 </div>
             </div>
         </section>
